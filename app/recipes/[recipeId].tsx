@@ -27,7 +27,7 @@ export default function RecipePage() {
 
       {/* Image with shadow */}
       <Image
-        source={{ uri: 'https://path-to-your-image.com/image.png' }} // Replace with actual image URL or local path
+        source={require('../../assets/images/recipe-images/rice-and-beef-skillet.jpeg')} // Replace with actual image URL or local path
         style={styles.image}
       />
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 8,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F89762',
     paddingVertical: 10,
     paddingHorizontal: 16,
-    borderRadius: 8,
-    alignSelf: 'center',
+    borderRadius: 15,
+    alignSelf: 'flex-start',
     marginTop: 16,
   },
   buttonText: {
