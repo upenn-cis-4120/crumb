@@ -14,8 +14,8 @@ export default function Index() {
     >
       <Text>Recipes Home Page</Text>
       <Button
-        title="Go to Recipe 123"
-        onPress={() => router.push('/recipes/123')} // Updated path to match the new structure
+        title="Go to Rice and Beef Skillet"
+        onPress={() => router.push('/recipes/rice-beef-skillet')} // Updated path to match the new structure
       />
     </View>
   ); 
