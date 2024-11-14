@@ -5,7 +5,7 @@ import {
 	TouchableOpacity,
 	FlatList,
 } from "react-native";
-import { Crumb } from "../app/types/crumb";
+import { Crumb } from "../types/crumb";
 import { useRouter } from "expo-router";
 
 interface CrumbListProps {

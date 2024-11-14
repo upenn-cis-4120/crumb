@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Crumb } from "../app/types/crumb";
+import { Crumb } from "../types/crumb";
 
 const STORAGE_KEY = "saved_crumbs";
 

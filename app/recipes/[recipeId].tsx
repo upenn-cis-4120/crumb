@@ -17,7 +17,7 @@ import * as Font from 'expo-font';
 
 
 export default function RecipePage() {
-	const { recipeId } = useLocalSearchParams(); // Access the recipe ID from the URL
+	const { recipeId } = useLocalSearchParams(); // Access the recipe ID from URL
 	const router = useRouter();
 
 	const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -40,7 +40,7 @@ export default function RecipePage() {
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={() => {
-								/* Add sharing options here */
+								/* TODO: Add options here */
 							}}
 						>
 							<Entypo name="dots-three-vertical" size={24} color="black" />
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 32,
-		fontFamily: "Crete Round", // Make sure this font is loaded in your project
+		fontFamily: "Crete Round",
 		color: "black",
 		marginBottom: 8,
 	},
