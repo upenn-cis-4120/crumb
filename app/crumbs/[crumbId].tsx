@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -6,18 +6,11 @@ import {
 	StyleSheet,
 	ScrollView,
 	TouchableOpacity,
+	SafeAreaView,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Entypo } from "@expo/vector-icons";
-
-// You'll want to replace these with your actual data interfaces
-interface IngredientData {
-	name: string;
-	calories: string;
-	protein: string;
-	tips: string[];
-	image: any; // Replace with proper image type
-}
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { useSavedCrumbs } from "@/hooks/useSavedCrumbs";
 
 interface SkillData {
 	name: string;
@@ -27,19 +20,12 @@ interface SkillData {
 }
 
 export default function CrumbPage() {
-	const { crumbId, type } = useLocalSearchParams();
+	const { crumbId } = useLocalSearchParams();
 	const router = useRouter();
+	const { saveCrumb, removeCrumb, savedCrumbs } = useSavedCrumbs();
+	const [isSaved, setIsSaved] = useState(false);
 
-	// Mock data - replace with actual data fetching
-	const mockIngredientData: IngredientData = {
-		name: typeof crumbId === "string" ? crumbId.replace(/-/g, " ") : "",
-		calories: "93 cal / oz",
-		protein: "5g protein / oz",
-		tips: ["Defrost in fridge overnight", "Substitute with chicken or beans!"],
-		image: require("../../assets/images/groundbeef.png"), // Update path as needed
-	};
-
-	const mockSkillData: SkillData = {
+	const data: SkillData = {
 		name: typeof crumbId === "string" ? crumbId.replace(/-/g, " ") : "",
 		description:
 			"Sautéing is a quick cooking method that uses high heat and minimal oil to brown food while preserving texture. Perfect for vegetables, meats, and creating flavorful bases for dishes.",
@@ -52,8 +38,9 @@ export default function CrumbPage() {
 		image: require("../../assets/images/cookingvideo.png"),
 	};
 
-	const isSkill = type === "skill";
-	const data = isSkill ? mockSkillData : mockIngredientData;
+	useEffect(() => {
+		setIsSaved(savedCrumbs.some((crumb) => crumb.id === data.name));
+	}, [savedCrumbs, data.name]);
 
 	const capitalizeWords = (str: string) => {
 		return str
@@ -67,71 +54,61 @@ export default function CrumbPage() {
 			? capitalizeWords(crumbId.replace(/-/g, " "))
 			: "";
 
+	const handleSaveCrumb = async () => {
+		if (isSaved) {
+			await removeCrumb(data.name);
+		} else {
+			await saveCrumb({
+				id: data.name,
+				title: title,
+				createdAt: new Date(),
+				description: data.description,
+			});
+		}
+		setIsSaved(!isSaved);
+	};
+
 	return (
-		<ScrollView style={styles.container}>
-			<View style={styles.header}>
-				<TouchableOpacity onPress={() => router.back()}>
-					<Entypo name="chevron-left" size={24} color="black" />
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => {
-						/* Add sharing options here */
-					}}
-				>
-					<Entypo name="dots-three-vertical" size={24} color="black" />
-				</TouchableOpacity>
-			</View>
-
-			<Text style={[styles.title, isSkill && styles.skillTitle]}>{title}</Text>
-
-			<Image source={data.image} style={styles.image} />
-
-			<View style={styles.detailsContainer}>
-				{isSkill ? (
-					<View>
-						<Text style={styles.description}>{mockSkillData.description}</Text>
-						<View style={styles.stepsContainer}>
-							<Text style={styles.sectionTitle}>Tips</Text>
-							{mockSkillData.steps.map((step, index) => (
-								<View key={index} style={styles.tipContainer}>
-									<Entypo name="dot-single" size={24} color="#FF7043" />
-									<Text style={styles.step}>{step}</Text>
-								</View>
-							))}
-						</View>
+		<SafeAreaView style={styles.safeArea}>
+			<ScrollView style={styles.container}>
+				<View style={styles.contentContainer}>
+					<View style={styles.header}>
+						<TouchableOpacity onPress={() => router.back()}>
+							<Entypo name="chevron-left" size={24} color="black" />
+						</TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => handleSaveCrumb()}
+							style={styles.bookmarkButton}
+						>
+							<MaterialIcons
+								name={isSaved ? "bookmark" : "bookmark-outline"}
+								size={24}
+								color="#FF7043"
+							/>
+						</TouchableOpacity>
 					</View>
-				) : (
-					<View>
-						<View style={styles.infoContainer}>
-							<View style={styles.infoItem}>
-								<Entypo name="cake" size={24} color="#FF7043" />
-								<Text style={styles.infoText}>
-									{mockIngredientData.calories}
-								</Text>
-							</View>
-							<View style={[styles.infoItem, styles.topMargin]}>
-								<Entypo name="bowl" size={24} color="#FF7043" />
-								<Text style={styles.infoText}>
-									{mockIngredientData.protein}
-								</Text>
+
+					<Text style={[styles.skillTitle]}>{title}</Text>
+
+					<Image source={data.image} style={styles.image} />
+
+					<View style={styles.detailsContainer}>
+						<View>
+							<Text style={styles.description}>{data.description}</Text>
+							<View style={styles.stepsContainer}>
+								<Text style={styles.sectionTitle}>Tips</Text>
+								{data.steps.map((step, index) => (
+									<View key={index} style={styles.tipContainer}>
+										<Entypo name="dot-single" size={24} color="#FF7043" />
+										<Text style={styles.step}>{step}</Text>
+									</View>
+								))}
 							</View>
 						</View>
-
-						<View style={styles.separator} />
-
-						<View style={styles.tipsContainer}>
-							<Text style={styles.sectionTitle}>Tips</Text>
-							{mockIngredientData.tips.map((tip, index) => (
-								<View key={index} style={styles.tipContainer}>
-									<Entypo name="dot-single" size={24} color="#FF7043" />
-									<Text style={styles.tip}>{tip}</Text>
-								</View>
-							))}
-						</View>
 					</View>
-				)}
-			</View>
-		</ScrollView>
+				</View>
+			</ScrollView>
+		</SafeAreaView>
 	);
 }
 
@@ -140,6 +117,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 16,
 		backgroundColor: "#FAF3ED",
+	},
+	contentContainer: {
+		flex: 1,
 	},
 	header: {
 		flexDirection: "row",
@@ -214,5 +194,12 @@ const styles = StyleSheet.create({
 		height: 1,
 		backgroundColor: "#A9A9B0",
 		marginBottom: 20,
+	},
+	bookmarkButton: {
+		padding: 8,
+	},
+	safeArea: {
+		flex: 1,
+		backgroundColor: "#FAF3ED",
 	},
 });
