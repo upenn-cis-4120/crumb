@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter, Href } from "expo-router";
 
 export default function RecipePage() {
-	const { recipeId } = useLocalSearchParams(); // Access the recipe ID from the URL
+	const { recipeId } = useLocalSearchParams(); // Access the recipe ID from URL
 	const router = useRouter();
 
 	return (
@@ -29,7 +29,7 @@ export default function RecipePage() {
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={() => {
-								/* Add sharing options here */
+								/* TODO: Add options here */
 							}}
 						>
 							<Entypo name="dots-three-vertical" size={24} color="black" />
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 32,
-		fontFamily: "Crete Round", // Make sure this font is loaded in your project
+		fontFamily: "Crete Round",
 		color: "black",
 		marginBottom: 8,
 	},
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
 	},
 	details: {
 		fontSize: 16,
-		fontFamily: "Inter", // Make sure this font is loaded in your project
+		fontFamily: "Inter",
 		color: "black",
 		marginBottom: 16,
 	},

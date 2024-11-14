@@ -4,7 +4,7 @@ import CrumbList from "../../components/CrumbList";
 import { useSavedCrumbs } from "../../hooks/useSavedCrumbs";
 
 export default function SavedScreen() {
-	const { savedCrumbs, clearCrumbs } = useSavedCrumbs();
+	const { savedCrumbs } = useSavedCrumbs();
 
 	return (
 		<SafeAreaView style={styles.safeArea}>

@@ -16,7 +16,7 @@ interface SkillData {
 	name: string;
 	description: string;
 	steps: string[];
-	image: any; // Replace with proper image type
+	image: any; // Maybe replace with image type later
 }
 
 export default function CrumbPage() {
