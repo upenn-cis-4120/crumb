@@ -9,8 +9,10 @@ import {
 	SafeAreaView,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as Font from "expo-font";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useSavedCrumbs } from "@/hooks/useSavedCrumbs";
+
 
 interface SkillData {
 	name: string;
@@ -24,6 +26,15 @@ export default function CrumbPage() {
 	const router = useRouter();
 	const { saveCrumb, removeCrumb, savedCrumbs } = useSavedCrumbs();
 	const [isSaved, setIsSaved] = useState(false);
+
+	const [fontsLoaded, setFontsLoaded] = useState(false); 
+
+	useEffect(() => {
+		Font.loadAsync({
+		'Crete Round': require('../../assets/fonts/CreteRound-Regular.ttf'),
+		'Inter': require('../../assets/fonts/Inter-Regular.ttf'),
+		}).then(() => setFontsLoaded(true));
+	}, []);
 
 	const data: SkillData = {
 		name: typeof crumbId === "string" ? crumbId.replace(/-/g, " ") : "",
@@ -146,6 +157,7 @@ const styles = StyleSheet.create({
 	},
 	description: {
 		fontSize: 16,
+		fontFamily: "Crete Round",
 		color: "#333",
 		marginBottom: 20,
 	},
@@ -184,6 +196,7 @@ const styles = StyleSheet.create({
 	},
 	step: {
 		fontSize: 16,
+		fontFamily: "Crete Round",
 		color: "#555",
 		marginLeft: 8,
 	},
