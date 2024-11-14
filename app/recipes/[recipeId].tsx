@@ -88,29 +88,15 @@ export default function RecipePage() {
 							1. Heat olive oil in a skillet and{" "}
 							<Text
 								style={styles.highlight}
-								onPress={() =>
-									router.push(
-										"/crumbs/saute?type=skill" as Href<"/crumbs/[skillCrumb]">
-									)
-								}
+								onPress={() => router.push("/crumbs/saute")}
 							>
 								sauté
 							</Text>{" "}
 							onions.
 						</Text>
 						<Text style={styles.step}>
-							2. Add{" "}
-							<Text
-								// style={styles.highlight}
-								// onPress={() =>
-								// 	router.push(
-								// 		"/crumbs/ground-beef?type=ingredient" as Href<"/crumbs/[ingredientCrumb]">
-								// 	)
-								// }
-							>
-								ground beef
-							</Text>
-							, dried mustard, bullion cubes, rice, and 1 cup of water.
+							2. Add <Text>ground beef</Text>, dried mustard, bullion cubes,
+							rice, and 1 cup of water.
 						</Text>
 						<Text style={styles.step}>3. Let the water absorb for 25min.</Text>
 					</View>
