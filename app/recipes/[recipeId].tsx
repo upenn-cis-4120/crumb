@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -13,15 +13,26 @@ import { useLocalSearchParams } from "expo-router";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter, Href } from "expo-router";
+import * as Font from 'expo-font';
+
 
 export default function RecipePage() {
 	const { recipeId } = useLocalSearchParams(); // Access the recipe ID from URL
 	const router = useRouter();
 
+	const [fontsLoaded, setFontsLoaded] = useState(false);
+
+	useEffect(() => {
+		Font.loadAsync({
+		'Crete Round': require('../../assets/fonts/CreteRound-Regular.ttf'),
+		'Inter': require('../../assets/fonts/Inter-Regular.ttf'),
+		}).then(() => setFontsLoaded(true));
+	}, []);
+
 	return (
 		<SafeAreaView style={styles.safeArea}>
 			<ScrollView style={styles.container}>
-				<View style={styles.contentContainer}>
+				<View style={styles.headerContainer}>
 					{/* Header with back button and menu */}
 					<View style={styles.header}>
 						<TouchableOpacity onPress={() => router.push("/" as Href<"/">)}>
@@ -35,7 +46,6 @@ export default function RecipePage() {
 							<Entypo name="dots-three-vertical" size={24} color="black" />
 						</TouchableOpacity>
 					</View>
-
 					{/* Title */}
 					<Text style={styles.title}>Rice & Beef Skillet</Text>
 
@@ -49,7 +59,10 @@ export default function RecipePage() {
 					<Text style={styles.details}>
 						60min • 500 cal/serving • 3 servings
 					</Text>
-					<Text>Recipe ID: {recipeId}</Text>
+				</View>
+				<View style={styles.contentContainer}>
+					
+					{/* <Text>Recipe ID: {recipeId}</Text> */}
 
 					{/* Ingredients List */}
 					<View style={styles.section}>
@@ -103,7 +116,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FAF3ED",
 	},
 	contentContainer: {
+		padding: 32,
+		paddingTop: 0,
+	},
+	headerContainer: {
 		padding: 16,
+		paddingBottom: 0,
 	},
 	header: {
 		flexDirection: "row",
@@ -129,7 +147,7 @@ const styles = StyleSheet.create({
 	},
 	details: {
 		fontSize: 16,
-		fontFamily: "Inter",
+		fontFamily: "Crete Round", // Make sure this font is loaded in your project
 		color: "black",
 		marginBottom: 16,
 	},
@@ -140,7 +158,7 @@ const styles = StyleSheet.create({
 	},
 	ingredient: {
 		fontSize: 16,
-		fontFamily: "Inter",
+		fontFamily: "Crete Round",
 		color: "black",
 		marginBottom: 4,
 	},
@@ -154,12 +172,12 @@ const styles = StyleSheet.create({
 	},
 	buttonText: {
 		color: "white",
-		fontFamily: "Inter",
+		fontFamily: "Crete Round",
 		fontSize: 16,
 	},
 	step: {
 		fontSize: 16,
-		fontFamily: "Inter",
+		fontFamily: "Crete Round",
 		color: "black",
 		marginBottom: 8,
 	},
