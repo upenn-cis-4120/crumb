@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Entypo } from "@expo/vector-icons";
+import * as Font from "expo-font";
 
 // You'll want to replace these with your actual data interfaces
 interface IngredientData {
@@ -29,6 +30,15 @@ interface SkillData {
 export default function CrumbPage() {
 	const { crumbId, type } = useLocalSearchParams();
 	const router = useRouter();
+
+	const [fontsLoaded, setFontsLoaded] = useState(false); 
+
+	useEffect(() => {
+		Font.loadAsync({
+		'Crete Round': require('../../assets/fonts/CreteRound-Regular.ttf'),
+		'Inter': require('../../assets/fonts/Inter-Regular.ttf'),
+		}).then(() => setFontsLoaded(true));
+	}, []);
 
 	// Mock data - replace with actual data fetching
 	const mockIngredientData: IngredientData = {
@@ -166,6 +176,7 @@ const styles = StyleSheet.create({
 	},
 	description: {
 		fontSize: 16,
+		fontFamily: "Crete Round",
 		color: "#333",
 		marginBottom: 20,
 	},
@@ -204,6 +215,7 @@ const styles = StyleSheet.create({
 	},
 	step: {
 		fontSize: 16,
+		fontFamily: "Crete Round",
 		color: "#555",
 		marginLeft: 8,
 	},
