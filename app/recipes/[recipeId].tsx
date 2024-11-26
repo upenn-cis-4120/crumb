@@ -7,6 +7,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	SafeAreaView,
+	Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
@@ -14,6 +15,7 @@ import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter, Href } from "expo-router";
 import * as Font from 'expo-font';
+import { Video, ResizeMode, Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 
 
 export default function RecipePage() {
@@ -21,6 +23,18 @@ export default function RecipePage() {
 	const router = useRouter();
 
 	const [fontsLoaded, setFontsLoaded] = useState(false);
+	
+	const [isVideoVisible, setIsVideoVisible] = useState(false); // State to control video visibility
+
+	Audio.setAudioModeAsync({
+		allowsRecordingIOS: false,
+		interruptionModeIOS: InterruptionModeIOS.DoNotMix, // Use the enum
+		playsInSilentModeIOS: true, // Enable audio in silent mode
+		shouldDuckAndroid: true,
+		interruptionModeAndroid: InterruptionModeAndroid.DoNotMix, // Use the enum
+		playThroughEarpieceAndroid: false,
+	});
+
 
 	useEffect(() => {
 		Font.loadAsync({
@@ -88,7 +102,8 @@ export default function RecipePage() {
 							1. Heat olive oil in a skillet and{" "}
 							<Text
 								style={styles.highlight}
-								onPress={() => router.push("/crumbs/saute")}
+								// onPress={() => router.push("/crumbs/saute")}
+								onPress={() => setIsVideoVisible(true)}
 							>
 								sauté
 							</Text>{" "}
@@ -100,6 +115,32 @@ export default function RecipePage() {
 						</Text>
 						<Text style={styles.step}>3. Let the water absorb for 25min.</Text>
 					</View>
+
+					{isVideoVisible && (
+                        <View style={styles.videoContainer}>
+                            <Pressable
+                                style={styles.overlay}
+                                onPress={() => setIsVideoVisible(false)} // Close video on overlay press
+                            />
+                            <Video
+                                source={require("../../assets/crumb-videos/saute.mp4")} // Replace with your video URL
+                                rate={1.0}
+                                volume={1.0}
+                                isMuted={false}
+                                resizeMode={ResizeMode.CONTAIN}
+                                shouldPlay
+								isLooping={false}
+								useNativeControls={true}
+                                style={styles.video}
+                            />
+                            <Pressable
+                                style={styles.closeButton}
+                                onPress={() => setIsVideoVisible(false)} // Close video button
+                            >
+                                <Text style={styles.closeButtonText}>X</Text>
+                            </Pressable>
+                        </View>
+                    )}
 				</View>
 			</ScrollView>
 		</SafeAreaView>
@@ -186,4 +227,40 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textDecorationLine: "underline",
 	},
+	videoContainer: {
+        position: "absolute",
+        top: 100, // Adjust as needed to position below "sauté"
+        left: 16,
+        right: 16,
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        borderRadius: 10,
+        overflow: "hidden",
+        zIndex: 10,
+    },
+    video: {
+        width: "100%",
+        height: 200,
+    },
+    overlay: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    closeButton: {
+        position: "absolute",
+        top: 60,
+        right: 8,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        backgroundColor: "#F76D22",
+        borderRadius: 5,
+    },
+    closeButtonText: {
+        color: "white",
+        fontFamily: "Crete Round",
+        fontSize: 14,
+    },
 });
