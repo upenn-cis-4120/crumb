@@ -12,7 +12,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Font from "expo-font";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useSavedCrumbs } from "@/hooks/useSavedCrumbs";
-import { Video, ResizeMode } from "expo-av";
+import { Video, ResizeMode, Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 
 
 interface SkillData {
@@ -29,6 +29,15 @@ export default function CrumbPage() {
 	const [isSaved, setIsSaved] = useState(false);
 
 	const [fontsLoaded, setFontsLoaded] = useState(false); 
+
+	Audio.setAudioModeAsync({
+		allowsRecordingIOS: false,
+		interruptionModeIOS: InterruptionModeIOS.DoNotMix, // Use the enum
+		playsInSilentModeIOS: true, // Enable audio in silent mode
+		shouldDuckAndroid: true,
+		interruptionModeAndroid: InterruptionModeAndroid.DoNotMix, // Use the enum
+		playThroughEarpieceAndroid: false,
+	});
 
 	useEffect(() => {
 		Font.loadAsync({
