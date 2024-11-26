@@ -12,13 +12,14 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Font from "expo-font";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useSavedCrumbs } from "@/hooks/useSavedCrumbs";
+import { Video, ResizeMode } from "expo-av";
 
 
 interface SkillData {
 	name: string;
 	description: string;
 	steps: string[];
-	image: any; // Maybe replace with image type later
+	video: any; // Maybe replace with image type later
 }
 
 export default function CrumbPage() {
@@ -46,7 +47,7 @@ export default function CrumbPage() {
 			"Add food in a single layer - don't overcrowd",
 			"Cook until golden brown, stirring occasionally",
 		],
-		image: require("../../assets/images/cookingvideo.png"),
+		video: require('../../assets/crumb-videos/saute.mp4'),
 	};
 
 	useEffect(() => {
@@ -101,7 +102,17 @@ export default function CrumbPage() {
 
 					<Text style={[styles.skillTitle]}>{title}</Text>
 
-					<Image source={data.image} style={styles.image} />
+					<Video
+						source={data.video} // Replace with actual video URL
+						rate={1.0}
+						volume={1.0}
+						isMuted={false}
+						useNativeControls={true}
+						resizeMode={ResizeMode.COVER}
+						shouldPlay={true}
+						isLooping={false}
+						style={styles.video}
+					/>
 
 					<View style={styles.detailsContainer}>
 						<View>
@@ -143,6 +154,13 @@ const styles = StyleSheet.create({
 		height: 200,
 		resizeMode: "cover",
 		marginVertical: 20,
+	},
+	video: {
+		width: "100%",
+		height: 200,
+		resizeMode: "cover",
+		marginVertical: 20,
+		borderRadius: 10,
 	},
 	detailsContainer: {
 		paddingHorizontal: 20,
