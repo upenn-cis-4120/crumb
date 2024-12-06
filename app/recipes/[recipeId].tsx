@@ -13,19 +13,20 @@ import { useLocalSearchParams } from "expo-router";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter, Href } from "expo-router";
-import * as Font from 'expo-font';
-
+import * as Font from "expo-font";
+import { useGroceryList } from "@/hooks/useGroceryList";
 
 export default function RecipePage() {
 	const { recipeId } = useLocalSearchParams(); // Access the recipe ID from URL
 	const router = useRouter();
+	const { addToGroceryList } = useGroceryList();
 
 	const [fontsLoaded, setFontsLoaded] = useState(false);
 
 	useEffect(() => {
 		Font.loadAsync({
-		'Neuton Bold': require('../../assets/fonts/Neuton-Bold.ttf'),
-		'Merriweather Sans': require('../../assets/fonts/MerriweatherSans.ttf'),
+			"Neuton Bold": require("../../assets/fonts/Neuton-Bold.ttf"),
+			"Merriweather Sans": require("../../assets/fonts/MerriweatherSans.ttf"),
 		}).then(() => setFontsLoaded(true));
 	}, []);
 
@@ -35,41 +36,49 @@ export default function RecipePage() {
 				<View style={styles.headerContainer}>
 					{/* Header with back button and menu */}
 					<View style={styles.header}>
-						<TouchableOpacity style={styles.headerButton} onPress={() => router.push("/" as Href<"/">)}>
+						<TouchableOpacity
+							style={styles.headerButton}
+							onPress={() => router.push("/" as Href<"/">)}
+						>
 							<View style={styles.buttonBackground}></View>
-							<Image style={styles.buttonIcon} source={require("../../assets/icons/arrow-left.png")} />
+							<Image
+								style={styles.buttonIcon}
+								source={require("../../assets/icons/arrow-left.png")}
+							/>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.headerButton}
+						<TouchableOpacity
+							style={styles.headerButton}
 							onPress={() => {
 								/* TODO: Add options here */
 							}}
 						>
 							<View style={styles.buttonBackground}></View>
-							<Image style={styles.buttonIcon} source={require("../../assets/icons/three-dots.png")} />
+							<Image
+								style={styles.buttonIcon}
+								source={require("../../assets/icons/three-dots.png")}
+							/>
 						</TouchableOpacity>
 					</View>
 				</View>
-					{/* Title */}
+				{/* Title */}
 
-					{/* Image with shadow */}
-					<Image
-						source={require("../../assets/images/recipe-images/rice-and-beef-skillet.jpeg")} // Replace with actual image URL or local path
-						style={styles.image}
-					/>
-				
+				{/* Image with shadow */}
+				<Image
+					source={require("../../assets/images/recipe-images/rice-and-beef-skillet.jpeg")} // Replace with actual image URL or local path
+					style={styles.image}
+				/>
+
 				<View style={styles.pageContainer}>
 					{/* Recipe details */}
 					<Text style={styles.title}>Rice & Beef Skillet</Text>
 					<Text style={styles.details}>
 						60min • 500 cal/serving • 3 servings
 					</Text>
-				
-					
+
 					{/* <Text>Recipe ID: {recipeId}</Text> */}
 
-
 					{/* Ingredients List */}
-					
+
 					<Text style={styles.sectionHeader}>Ingredients</Text>
 
 					<View style={styles.section}>
@@ -85,9 +94,26 @@ export default function RecipePage() {
 					</View>
 
 					{/* Add to Grocery List Button */}
-					<TouchableOpacity style={styles.button}>
-							<Image style={styles.cartIcon} source={require("../../assets/icons/add-shopping-cart-white.png")} />
-							<Text style={styles.buttonText}>Add to Grocery List</Text>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							const ingredients = [
+								"1 onion, chopped",
+								"1 lb ground beef",
+								"1 cup monterey jack cheese",
+								"1 tsp dried mustard",
+								"3 beef bullion cubes, crushed",
+								"2 scallions, sliced",
+								"1 cup rice",
+							];
+							addToGroceryList(ingredients, recipeId as string);
+						}}
+					>
+						<Image
+							style={styles.cartIcon}
+							source={require("../../assets/icons/add-shopping-cart-white.png")}
+						/>
+						<Text style={styles.buttonText}>Add to Grocery List</Text>
 					</TouchableOpacity>
 
 					{/* Recipe Steps */}
@@ -182,9 +208,7 @@ const styles = StyleSheet.create({
 		fontFamily: "Merriweather Sans", // Make sure this font is loaded in your project
 		color: "1E1E24",
 	},
-	section: {
-
-	},
+	section: {},
 	sectionHeader: {
 		fontSize: 24,
 		fontFamily: "Neuton Bold",
@@ -195,7 +219,6 @@ const styles = StyleSheet.create({
 		fontFamily: "Merriweather Sans",
 		color: "1E1E24",
 		lineHeight: 24,
-
 	},
 	button: {
 		backgroundColor: "#F46036",

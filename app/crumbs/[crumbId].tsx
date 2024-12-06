@@ -12,8 +12,13 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Font from "expo-font";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useSavedCrumbs } from "@/hooks/useSavedCrumbs";
-import { Video, ResizeMode, Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
-
+import {
+	Video,
+	ResizeMode,
+	Audio,
+	InterruptionModeIOS,
+	InterruptionModeAndroid,
+} from "expo-av";
 
 interface SkillData {
 	name: string;
@@ -28,7 +33,7 @@ export default function CrumbPage() {
 	const { saveCrumb, removeCrumb, savedCrumbs } = useSavedCrumbs();
 	const [isSaved, setIsSaved] = useState(false);
 
-	const [fontsLoaded, setFontsLoaded] = useState(false); 
+	const [fontsLoaded, setFontsLoaded] = useState(false);
 
 	Audio.setAudioModeAsync({
 		allowsRecordingIOS: false,
@@ -41,8 +46,8 @@ export default function CrumbPage() {
 
 	useEffect(() => {
 		Font.loadAsync({
-		'Neuton Bold': require('../../assets/fonts/Neuton-Bold.ttf'),
-		'Merriweather Sans': require('../../assets/fonts/MerriweatherSans.ttf'),
+			"Neuton Bold": require("../../assets/fonts/Neuton-Bold.ttf"),
+			"Merriweather Sans": require("../../assets/fonts/MerriweatherSans.ttf"),
 		}).then(() => setFontsLoaded(true));
 	}, []);
 
@@ -56,7 +61,7 @@ export default function CrumbPage() {
 			"Add food in a single layer - don't overcrowd",
 			"Cook until golden brown, stirring occasionally",
 		],
-		video: require('../../assets/crumb-videos/saute.mp4'),
+		video: require("../../assets/crumb-videos/saute.mp4"),
 	};
 
 	useEffect(() => {
@@ -96,17 +101,27 @@ export default function CrumbPage() {
 					<View style={styles.headerContainer}>
 						{/* Header with back button and menu */}
 						<View style={styles.header}>
-							<TouchableOpacity style={styles.headerButton} onPress={() => router.push("/" as Href<"/">)}>
+							<TouchableOpacity
+								style={styles.headerButton}
+								onPress={() => router.push("/" as Href<"/">)}
+							>
 								<View style={styles.buttonBackground}></View>
-								<Image style={styles.buttonIcon} source={require("../../assets/icons/arrow-left.png")} />
+								<Image
+									style={styles.buttonIcon}
+									source={require("../../assets/icons/arrow-left.png")}
+								/>
 							</TouchableOpacity>
-							<TouchableOpacity style={styles.headerButton}
+							<TouchableOpacity
+								style={styles.headerButton}
 								onPress={() => {
 									/* TODO: Add options here */
 								}}
 							>
 								<View style={styles.buttonBackground}></View>
-								<Image style={styles.buttonIcon} source={require("../../assets/icons/three-dots.png")} />
+								<Image
+									style={styles.buttonIcon}
+									source={require("../../assets/icons/three-dots.png")}
+								/>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -124,18 +139,36 @@ export default function CrumbPage() {
 					/>
 
 					<View style={styles.pageContainer}>
-						<Text style={[styles.title]}>{title}</Text>
+						<View style={styles.titleRow}>
+							<Text style={[styles.title]}>{title}</Text>
+							<TouchableOpacity
+								style={styles.saveButton}
+								onPress={handleSaveCrumb}
+							>
+								<MaterialIcons
+									name={isSaved ? "bookmark" : "bookmark-outline"}
+									size={24}
+									color="#F46036"
+								/>
+							</TouchableOpacity>
+						</View>
 
 						<Text style={styles.infoText}>{data.description}</Text>
-						
+
 						<Text style={styles.sectionTitle}>Tips</Text>
 
 						<View style={styles.stepsContainer}>
 							{data.steps.map((step, index) => (
 								<View key={index} style={styles.tipContainer}>
-									<TouchableOpacity style={styles.tipsIcon} onPress={() => router.push("/" as Href<"/">)}>
+									<TouchableOpacity
+										style={styles.tipsIcon}
+										onPress={() => router.push("/" as Href<"/">)}
+									>
 										<View style={styles.iconBackground}></View>
-										<Image style={styles.iconImage} source={require("../../assets/icons/exclamation.png")} />
+										<Image
+											style={styles.iconImage}
+											source={require("../../assets/icons/exclamation.png")}
+										/>
 									</TouchableOpacity>
 									<Text style={styles.tip}>{step}</Text>
 								</View>
@@ -214,8 +247,7 @@ const styles = StyleSheet.create({
 		fontFamily: "Neuton Bold",
 		color: "#1E1E24",
 	},
-	infoContainer: {
-	},
+	infoContainer: {},
 	infoItem: {
 		flexDirection: "row",
 		alignItems: "center",
@@ -230,8 +262,7 @@ const styles = StyleSheet.create({
 		fontFamily: "Neuton Bold",
 		color: "#1E1E24",
 	},
-	tipsContainer: {
-	},
+	tipsContainer: {},
 	stepsContainer: {
 		gap: 10,
 		paddingRight: 25,
@@ -246,8 +277,7 @@ const styles = StyleSheet.create({
 		color: "#1E1E24",
 		fontFamily: "Merriweather Sans",
 	},
-	tipsIcon: {
-	},
+	tipsIcon: {},
 	iconBackground: {
 		width: 30,
 		height: 30,
@@ -269,16 +299,22 @@ const styles = StyleSheet.create({
 		fontFamily: "Neuton Bold",
 		color: "#555",
 	},
-	topMargin: {
-	},
+	topMargin: {},
 	separator: {
 		height: 1,
 		backgroundColor: "#A9A9B0",
 	},
-	bookmarkButton: {
-	},
+	bookmarkButton: {},
 	safeArea: {
 		flex: 1,
 		backgroundColor: "#FAF3ED",
+	},
+	titleRow: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	saveButton: {
+		padding: 8,
 	},
 });
