@@ -41,8 +41,8 @@ export default function CrumbPage() {
 
 	useEffect(() => {
 		Font.loadAsync({
-		'Crete Round': require('../../assets/fonts/CreteRound-Regular.ttf'),
-		'Inter': require('../../assets/fonts/Inter-Regular.ttf'),
+		'Neuton Bold': require('../../assets/fonts/Neuton-Bold.ttf'),
+		'Merriweather Sans': require('../../assets/fonts/MerriweatherSans.ttf'),
 		}).then(() => setFontsLoaded(true));
 	}, []);
 
@@ -93,23 +93,23 @@ export default function CrumbPage() {
 		<SafeAreaView style={styles.safeArea}>
 			<ScrollView style={styles.container}>
 				<View style={styles.contentContainer}>
-					<View style={styles.header}>
-						<TouchableOpacity onPress={() => router.back()}>
-							<Entypo name="chevron-left" size={24} color="black" />
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => handleSaveCrumb()}
-							style={styles.bookmarkButton}
-						>
-							<MaterialIcons
-								name={isSaved ? "bookmark" : "bookmark-outline"}
-								size={24}
-								color="#FF7043"
-							/>
-						</TouchableOpacity>
+					<View style={styles.headerContainer}>
+						{/* Header with back button and menu */}
+						<View style={styles.header}>
+							<TouchableOpacity style={styles.headerButton} onPress={() => router.push("/" as Href<"/">)}>
+								<View style={styles.buttonBackground}></View>
+								<Image style={styles.buttonIcon} source={require("../../assets/icons/arrow-left.png")} />
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.headerButton}
+								onPress={() => {
+									/* TODO: Add options here */
+								}}
+							>
+								<View style={styles.buttonBackground}></View>
+								<Image style={styles.buttonIcon} source={require("../../assets/icons/three-dots.png")} />
+							</TouchableOpacity>
+						</View>
 					</View>
-
-					<Text style={[styles.skillTitle]}>{title}</Text>
 
 					<Video
 						source={data.video} // Replace with actual video URL
@@ -118,23 +118,28 @@ export default function CrumbPage() {
 						isMuted={false}
 						useNativeControls={true}
 						resizeMode={ResizeMode.COVER}
-						shouldPlay={true}
+						shouldPlay={false}
 						isLooping={false}
 						style={styles.video}
 					/>
 
-					<View style={styles.detailsContainer}>
-						<View>
-							<Text style={styles.description}>{data.description}</Text>
-							<View style={styles.stepsContainer}>
-								<Text style={styles.sectionTitle}>Tips</Text>
-								{data.steps.map((step, index) => (
-									<View key={index} style={styles.tipContainer}>
-										<Entypo name="dot-single" size={24} color="#FF7043" />
-										<Text style={styles.step}>{step}</Text>
-									</View>
-								))}
-							</View>
+					<View style={styles.pageContainer}>
+						<Text style={[styles.title]}>{title}</Text>
+
+						<Text style={styles.infoText}>{data.description}</Text>
+						
+						<Text style={styles.sectionTitle}>Tips</Text>
+
+						<View style={styles.stepsContainer}>
+							{data.steps.map((step, index) => (
+								<View key={index} style={styles.tipContainer}>
+									<TouchableOpacity style={styles.tipsIcon} onPress={() => router.push("/" as Href<"/">)}>
+										<View style={styles.iconBackground}></View>
+										<Image style={styles.iconImage} source={require("../../assets/icons/exclamation.png")} />
+									</TouchableOpacity>
+									<Text style={styles.tip}>{step}</Text>
+								</View>
+							))}
 						</View>
 					</View>
 				</View>
@@ -146,50 +151,70 @@ export default function CrumbPage() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 16,
 		backgroundColor: "#FAF3ED",
 	},
 	contentContainer: {
 		flex: 1,
 	},
+	headerContainer: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		zIndex: 1,
+	},
 	header: {
+		flex: 1,
 		flexDirection: "row",
+		paddingHorizontal: 20,
+		paddingTop: 20,
+		width: "100%",
 		justifyContent: "space-between",
 		alignItems: "center",
-		marginBottom: 16,
+	},
+	headerButton: {
+		opacity: 0.7,
+	},
+	buttonBackground: {
+		width: 30,
+		height: 30,
+		flexShrink: 0,
+		borderRadius: 50,
+		backgroundColor: "#FFFCF9",
+		zIndex: 1,
+	},
+	buttonIcon: {
+		width: 20,
+		height: 20,
+		position: "absolute",
+		top: 5,
+		left: 5,
+		zIndex: 2,
 	},
 	image: {
 		width: "100%",
 		height: 200,
 		resizeMode: "cover",
-		marginVertical: 20,
 	},
 	video: {
 		width: "100%",
 		height: 200,
 		resizeMode: "cover",
-		marginVertical: 20,
-		borderRadius: 10,
 	},
-	detailsContainer: {
-		paddingHorizontal: 20,
+	pageContainer: {
+		paddingHorizontal: 25,
+		paddingTop: 20,
+		gap: 20,
 	},
 	title: {
-		fontSize: 32,
-		fontFamily: "Crete Round",
-		marginBottom: 16,
-	},
-	skillTitle: {
-		fontSize: 40,
+		fontSize: 43,
+		fontFamily: "Neuton Bold",
 	},
 	description: {
 		fontSize: 16,
-		fontFamily: "Crete Round",
-		color: "#333",
-		marginBottom: 20,
+		fontFamily: "Neuton Bold",
+		color: "#1E1E24",
 	},
 	infoContainer: {
-		marginBottom: 20,
 	},
 	infoItem: {
 		flexDirection: "row",
@@ -197,46 +222,60 @@ const styles = StyleSheet.create({
 	},
 	infoText: {
 		fontSize: 16,
-		color: "#333",
-		marginLeft: 8,
+		fontFamily: "Merriweather Sans",
+		color: "#1E1E24",
 	},
 	sectionTitle: {
-		fontSize: 20,
-		fontFamily: "Crete Round",
-		marginBottom: 10,
+		fontSize: 24,
+		fontFamily: "Neuton Bold",
+		color: "#1E1E24",
 	},
 	tipsContainer: {
-		marginTop: 20,
 	},
 	stepsContainer: {
-		marginTop: 20,
+		gap: 10,
+		paddingRight: 25,
 	},
 	tipContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 5,
+		gap: 8,
 	},
 	tip: {
 		fontSize: 16,
-		color: "#555",
-		marginLeft: 8,
+		color: "#1E1E24",
+		fontFamily: "Merriweather Sans",
+	},
+	tipsIcon: {
+	},
+	iconBackground: {
+		width: 30,
+		height: 30,
+		flexShrink: 0,
+		borderRadius: 50,
+		backgroundColor: "#F46036",
+		zIndex: 1,
+	},
+	iconImage: {
+		width: 20,
+		height: 20,
+		position: "absolute",
+		top: 5,
+		left: 5,
+		zIndex: 2,
 	},
 	step: {
 		fontSize: 16,
-		fontFamily: "Crete Round",
+		fontFamily: "Neuton Bold",
 		color: "#555",
-		marginLeft: 8,
 	},
 	topMargin: {
-		marginTop: 12,
 	},
 	separator: {
 		height: 1,
 		backgroundColor: "#A9A9B0",
-		marginBottom: 20,
 	},
 	bookmarkButton: {
-		padding: 8,
 	},
 	safeArea: {
 		flex: 1,
