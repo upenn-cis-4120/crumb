@@ -1,5 +1,4 @@
-import React from "react";
-import {
+import React, { useState, useEffect } from "react";import {
 	View,
 	Text,
 	Image,
@@ -10,14 +9,24 @@ import {
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import * as Font from 'expo-font';
 
 export default function Index() {
 	const router = useRouter();
 
+	const [fontsLoaded, setFontsLoaded] = useState(false);
+
+	useEffect(() => {
+		Font.loadAsync({
+		'Neuton Bold': require('../../assets/fonts/Neuton-Bold.ttf'),
+		'Merriweather Sans': require('../../assets/fonts/MerriweatherSans.ttf'),
+		}).then(() => setFontsLoaded(true));
+	}, []);
+
 	// Mock data for demonstration
 	const mockRecipes = [
 		{
-			name: "Creamy Herb Chicken",
+			name: "Herb Chicken",
 			calories: "195 Cal",
 			cookTime: "1 hr 10 min",
 			image: require("../../assets/images/chicken.jpg"),
@@ -94,7 +103,7 @@ export default function Index() {
 			{/* Horizontal filter buttons with filter icon */}
 			<ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
 				<TouchableOpacity style={styles.filterIconButton}>
-					<Entypo name="grid" size={24} color="#FFFFFF" />
+					<Entypo name="grid" size={24} color="#FFFDFA" />
 				</TouchableOpacity>
 				{cuisines.map((cuisine, index) => (
 					<TouchableOpacity key={index} style={styles.filterButton}>
@@ -133,13 +142,14 @@ export default function Index() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 16,
-		backgroundColor: "#FFF7EB",
+		paddingHorizontal: 16,
+		paddingTop: 20,
+		backgroundColor: "#FFFCF9",
 	},
 	searchContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#FFFCF9",
 		borderRadius: 10,
 		padding: 10,
 		marginBottom: 16,
@@ -151,23 +161,26 @@ const styles = StyleSheet.create({
 	searchInput: {
 		marginLeft: 10,
 		fontSize: 16,
-		color: "#333",
+		fontFamily: "Merriweather Sans",
+		color: "#1E1E24",
 		flex: 1,
 	},
 	filtersContainer: {
 		flexDirection: "row",
 		marginBottom: 16,
+		marginHorizontal: -16,
 	},
 	filterIconButton: {
-		backgroundColor: "#F89762",
+		backgroundColor: "#F46036",
 		padding: 8,
 		borderRadius: 15,
 		justifyContent: "center",
 		alignItems: "center",
 		marginRight: 8,
+		marginLeft: 16,
 	},
 	filterButton: {
-		backgroundColor: "#F89762",
+		backgroundColor: "#F46036",
 		paddingVertical: 8,
 		paddingHorizontal: 16,
 		borderRadius: 15,
@@ -176,8 +189,9 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	filterText: {
-		color: "#FFFFFF",
+		color: "#FFFDFA",
 		fontSize: 14,
+		fontFamily: "Merriweather Sans",
 		fontWeight: "bold",
 		textAlign: "center",
 	},
@@ -192,7 +206,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		overflow: "hidden",
 		marginBottom: 16,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#FFFDFA",
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.1,
@@ -203,7 +217,7 @@ const styles = StyleSheet.create({
 		height: 120, // Adjusted height to take up top 2/3
 	},
 	recipeInfo: {
-		backgroundColor: "#F89762", // Set bottom third to #F89762
+		backgroundColor: "#F46036", // Set bottom third to #F46036
 		paddingVertical: 10,
 		paddingHorizontal: 8,
 		alignItems: "center",
@@ -211,13 +225,15 @@ const styles = StyleSheet.create({
 	recipeTitle: {
 		fontSize: 16,
 		fontWeight: "bold",
-		color: "#FFFFFF", // White text for better contrast
+		fontFamily: "Merriweather Sans",
+		color: "#FFFDFA", // White text for better contrast
 		marginBottom: 4,
 		textAlign: "center",
 	},
 	recipeDetails: {
 		fontSize: 14,
-		color: "#FFFFFF", // White text for better contrast
+		fontFamily: "Merriweather Sans",
+		color: "#FFFDFA", // White text for better contrast
 		textAlign: "center",
 	},
 });

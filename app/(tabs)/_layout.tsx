@@ -4,9 +4,9 @@ import { TabBarIcon } from "@/components/TabBarIcon";
 
 export default function TabLayout() {
 	const Colors = {
-		active: "#F76D22", // Orange for the selected icon
-		inactive: "#B0BEC5", // Light gray for inactive icons
-		background: "#FFFFFF", // White for the tab bar background
+		active: "#FFF7EB", // Orange for the selected icon
+		inactive: "#8F8A87", // Light gray for inactive icons
+		background: "#1E1E24", // White for the tab bar background
 	};
 
 	return (
@@ -21,7 +21,7 @@ export default function TabLayout() {
 					paddingBottom: 8,
 					paddingTop: 8,
 					borderTopWidth: 4,
-					borderTopColor: Colors.active,
+					borderTopColor: "#F46036",
 				},
 				headerShown: false,
 			}}
@@ -62,7 +62,7 @@ export default function TabLayout() {
 					),
 				}}
 			/>
-			<Tabs.Screen
+			{/* <Tabs.Screen
 				name="settings"
 				options={{
 					title: "Settings",
@@ -73,7 +73,7 @@ export default function TabLayout() {
 						/>
 					),
 				}}
-			/>
+			/> */}
 		</Tabs>
 	);
 }
