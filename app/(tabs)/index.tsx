@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";import {
+import React, { useState, useEffect } from "react";
+import {
 	View,
 	Text,
 	Image,
@@ -9,7 +10,7 @@ import React, { useState, useEffect } from "react";import {
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import * as Font from 'expo-font';
+import * as Font from "expo-font";
 
 export default function Index() {
 	const router = useRouter();
@@ -18,8 +19,8 @@ export default function Index() {
 
 	useEffect(() => {
 		Font.loadAsync({
-		'Neuton Bold': require('../../assets/fonts/Neuton-Bold.ttf'),
-		'Merriweather Sans': require('../../assets/fonts/MerriweatherSans.ttf'),
+			"Neuton Bold": require("../../assets/fonts/Neuton-Bold.ttf"),
+			"Merriweather Sans": require("../../assets/fonts/MerriweatherSans.ttf"),
 		}).then(() => setFontsLoaded(true));
 	}, []);
 
@@ -30,12 +31,14 @@ export default function Index() {
 			calories: "195 Cal",
 			cookTime: "1 hr 10 min",
 			image: require("../../assets/images/chicken.jpg"),
+			isLink: true,
 		},
 		{
 			name: "Chicken Lo Mein",
 			calories: "875 Cal",
 			cookTime: "40 min",
 			image: require("../../assets/images/chicken-lo-mein.jpg"),
+			isLink: true,
 		},
 		{
 			name: "Rice and Beef Skillet",
@@ -45,34 +48,39 @@ export default function Index() {
 			isLink: true,
 		},
 		{
-			name: "Steak",
+			name: "Pan Seared Ribeye Steak",
 			calories: "250 Cal",
 			cookTime: "20 min",
 			image: require("../../assets/images/steak.jpg"),
+			isLink: true,
 		},
 		{
 			name: "Pan Seared Salmon",
 			calories: "600 Cal",
 			cookTime: "45 min",
 			image: require("../../assets/images/salmon.jpg"),
+			isLink: true,
 		},
 		{
 			name: "Carbonara",
 			calories: "300 Cal",
 			cookTime: "30 min",
 			image: require("../../assets/images/carbonara.jpg"),
+			isLink: true,
 		},
 		{
 			name: "Ramen",
 			calories: "200 Cal",
 			cookTime: "25 min",
 			image: require("../../assets/images/ramen.jpg"),
+			isLink: true,
 		},
 		{
 			name: "Beef Tacos",
 			calories: "400 Cal",
 			cookTime: "35 min",
 			image: require("../../assets/images/tacos.jpg"),
+			isLink: true,
 		},
 	];
 
@@ -101,7 +109,11 @@ export default function Index() {
 			</View>
 
 			{/* Horizontal filter buttons with filter icon */}
-			<ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
+			<ScrollView
+				horizontal
+				showsHorizontalScrollIndicator={false}
+				style={styles.filtersContainer}
+			>
 				<TouchableOpacity style={styles.filterIconButton}>
 					<Entypo name="grid" size={24} color="#FFFDFA" />
 				</TouchableOpacity>
@@ -119,9 +131,9 @@ export default function Index() {
 						key={index}
 						style={styles.recipeCard}
 						onPress={() => {
-							// Navigate if it's the Rice and Beef Skillet card
 							if (recipe.isLink) {
-								router.push("/recipes/rice-beef-skillet");
+								const recipeUrl = recipe.name.toLowerCase().replace(/ /g, "-");
+								router.push(`/recipes/${recipeUrl}`);
 							}
 						}}
 					>

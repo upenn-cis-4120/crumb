@@ -15,6 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter, Href } from "expo-router";
 import * as Font from "expo-font";
 import { useGroceryList } from "@/hooks/useGroceryList";
+import { getRecipeData } from "@/utils/recipeData";
 
 export default function RecipePage() {
 	const { recipeId } = useLocalSearchParams(); // Access the recipe ID from URL
@@ -29,6 +30,51 @@ export default function RecipePage() {
 			"Merriweather Sans": require("../../assets/fonts/MerriweatherSans.ttf"),
 		}).then(() => setFontsLoaded(true));
 	}, []);
+
+	const recipeData = getRecipeData(recipeId as string);
+
+	const getRecipeImage = (id: string) => {
+		switch (id) {
+			case "herb-chicken":
+				return require("../../assets/images/chicken.jpg");
+			case "chicken-lo-mein":
+				return require("../../assets/images/chicken-lo-mein.jpg");
+			case "rice-and-beef-skillet":
+				return require("../../assets/images/recipe-images/rice-and-beef-skillet.jpeg");
+			case "pan-seared-ribeye-steak":
+				return require("../../assets/images/steak.jpg");
+			case "pan-seared-salmon":
+				return require("../../assets/images/salmon.jpg");
+			case "carbonara":
+				return require("../../assets/images/carbonara.jpg");
+			case "ramen":
+				return require("../../assets/images/ramen.jpg");
+			case "beef-tacos":
+				return require("../../assets/images/tacos.jpg");
+			default:
+				return require("../../assets/images/recipe-images/rice-and-beef-skillet.jpeg");
+		}
+	};
+
+	const renderStepWithLinks = (step: string) => {
+		// Check if step contains [saute] tag
+		if (step.includes("[saute]")) {
+			const parts = step.split(/\[saute\]|\[\/saute\]/);
+			return (
+				<>
+					{parts[0]}
+					<Text
+						style={styles.highlight}
+						onPress={() => router.push("/crumbs/saute")}
+					>
+						sauté
+					</Text>
+					{parts[2]}
+				</>
+			);
+		}
+		return step;
+	};
 
 	return (
 		<SafeAreaView style={styles.safeArea}>
@@ -64,15 +110,16 @@ export default function RecipePage() {
 
 				{/* Image with shadow */}
 				<Image
-					source={require("../../assets/images/recipe-images/rice-and-beef-skillet.jpeg")} // Replace with actual image URL or local path
+					source={getRecipeImage(recipeId as string)}
 					style={styles.image}
 				/>
 
 				<View style={styles.pageContainer}>
 					{/* Recipe details */}
-					<Text style={styles.title}>Rice & Beef Skillet</Text>
+					<Text style={styles.title}>{recipeData?.title}</Text>
 					<Text style={styles.details}>
-						60min • 500 cal/serving • 3 servings
+						{recipeData?.cookTime} • {recipeData?.calories} cal/serving •{" "}
+						{recipeData?.servings} servings
 					</Text>
 
 					{/* <Text>Recipe ID: {recipeId}</Text> */}
@@ -82,31 +129,20 @@ export default function RecipePage() {
 					<Text style={styles.sectionHeader}>Ingredients</Text>
 
 					<View style={styles.section}>
-						<Text style={styles.ingredient}>• 1 onion, chopped</Text>
-						<Text style={styles.ingredient}>• 1 lb ground beef</Text>
-						<Text style={styles.ingredient}>• 1 cup monterey jack cheese</Text>
-						<Text style={styles.ingredient}>• 1 tsp dried mustard</Text>
-						<Text style={styles.ingredient}>
-							• 3 beef bullion cubes, crushed
-						</Text>
-						<Text style={styles.ingredient}>• 2 scallions, sliced</Text>
-						<Text style={styles.ingredient}>• 1 cup rice</Text>
+						{recipeData?.ingredients.map((ingredient, index) => (
+							<Text key={index} style={styles.ingredient}>
+								• {ingredient}
+							</Text>
+						))}
 					</View>
 
 					{/* Add to Grocery List Button */}
 					<TouchableOpacity
 						style={styles.button}
 						onPress={() => {
-							const ingredients = [
-								"1 onion, chopped",
-								"1 lb ground beef",
-								"1 cup monterey jack cheese",
-								"1 tsp dried mustard",
-								"3 beef bullion cubes, crushed",
-								"2 scallions, sliced",
-								"1 cup rice",
-							];
-							addToGroceryList(ingredients, recipeId as string);
+							if (recipeData) {
+								addToGroceryList(recipeData.ingredients, recipeId as string);
+							}
 						}}
 					>
 						<Image
@@ -120,21 +156,11 @@ export default function RecipePage() {
 					<Text style={styles.sectionHeader}>Instructions</Text>
 
 					<View style={styles.section}>
-						<Text style={styles.step}>
-							1. Heat olive oil in a skillet and{" "}
-							<Text
-								style={styles.highlight}
-								onPress={() => router.push("/crumbs/saute")}
-							>
-								sauté
-							</Text>{" "}
-							onions.
-						</Text>
-						<Text style={styles.step}>
-							2. Add <Text>ground beef</Text>, dried mustard, bullion cubes,
-							rice, and 1 cup of water.
-						</Text>
-						<Text style={styles.step}>3. Let the water absorb for 25min.</Text>
+						{recipeData?.steps.map((step, index) => (
+							<Text key={index} style={styles.step}>
+								{index + 1}. {renderStepWithLinks(step)}
+							</Text>
+						))}
 					</View>
 				</View>
 			</ScrollView>
